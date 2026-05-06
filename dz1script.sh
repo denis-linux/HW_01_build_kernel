@@ -46,16 +46,20 @@ function compile_kernel() {
     echo "nano .config"
     
     # Устанавливаем параметры отладки для ядра 7.x
-    set_val "CONFIG_DEBUG_INFO" "y"
-    set_val "CONFIG_DEBUG_INFO_NONE" "n"
-    set_val "CONFIG_DEBUG_INFO_DWARF5" "y"  # В ядре 7.x лучше DWARF5 вместо DWARF4
+    #set_val "CONFIG_DEBUG_INFO" "y"
+    #set_val "CONFIG_DEBUG_INFO_NONE" "n"
+    #set_val "CONFIG_DEBUG_INFO_DWARF5" "y"  # В ядре 7.x лучше DWARF5 вместо DWARF4
+    ./scripts/config --set-val CONFIG_DEBUG_INFO y
+    ./scripts/config --set-val CONFIG_DEBUG_INFO_NONE n
+    #./scripts/config --set-val CONFIG_DEBUG_INFO_DWARF4 y
+    ./scripts/config --set-val CONFIG_DEBUG_INFO_DWARF5 y
     
     make olddefconfig 
-    
-    echo "========================================="
-    echo "Для компиляции выполните:"
-    echo "time make -j\$(nproc) bindeb-pkg"
-    echo "========================================="
+    echo -e "olddefconfig ok"
+   # echo "========================================="
+   # echo "Для компиляции выполните:"
+   # echo "time make -j\$(nproc) bindeb-pkg"
+   # echo "========================================="
 }
 
 ################ START SCRIPT ####################
@@ -102,10 +106,8 @@ enable "DEBUG_KMEMLEAK"
 enable "DEBUG_STACK_USAGE"
 enable "PROVE_LOCKING"
 
-# Устанавливаем параметры отладки
-set_val "CONFIG_DEBUG_INFO" "y"
-set_val "CONFIG_DEBUG_INFO_NONE" "n"
-set_val "CONFIG_DEBUG_INFO_DWARF5" "y"
+compile_kernel
+
 
 # Проверка конфига
 echo -e "\nПроверка конфига:"
