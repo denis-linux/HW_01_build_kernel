@@ -2,16 +2,7 @@
 
 
 function install_apt(){
-sudo apt install -y build-essential libncurses-dev bison flex libssl-dev bc rsync wget dpkg-dev dwarves kmod cpio
-
-
-sudo apt install -y debhelper-compat libdw-dev libelf-dev
-
-
-sudo apt install -y debhelper libdw-dev libelf-dev
-
-
-sudo apt install -y dpkg-dev flex bison libssl-dev libncurses-dev bc rsync dwarves kmod cpio
+sudo apt install -y build-essential libncurses-dev bison flex libssl-dev bc rsync wget dpkg-dev dwarves kmod cpio debhelper-compat libdw-dev libelf-dev debhelper
 
 wget https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-7.0.3.tar.xz
 tar -xf linux-7.0.3.tar.xz
