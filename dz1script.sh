@@ -17,6 +17,10 @@ tar -xf linux-7.0.3.tar.xz
 cd linux-7.0.3
 }
 
+function deleteCASH() {
+    rm -f ../linux-u*
+    rm -f ../linux-*
+}
 
 function makeCONFIG() {
     echo "Создание конфига для ядра 7.0.3..."
