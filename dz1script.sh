@@ -1,9 +1,16 @@
 #!/bin/bash
 
 # Путь к исходникам (если не в текущей директории)
-KERNEL_DIR=~/linux-7.0.3
 
-cd $KERNEL_DIR || exit 1
+
+function install_apt(){
+apt install -y build-essential libncurses-dev bison flex libssl-dev bc rsync wget dpkg-dev dwarves kmod cpio
+
+wget https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-7.0.3.tar.xz
+tar -xf linux-7.0.3.tar.xz
+cd linux-7.0.3
+}
+
 
 function makeCONFIG() {
     echo "Создание конфига для ядра 7.0.3..."
