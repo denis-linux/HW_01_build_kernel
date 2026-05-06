@@ -23,6 +23,6 @@
 
 apt install -y build-essential libncurses-dev bison flex libssl-dev bc rsync
 
-#dnf install -y build-essential libncurses-dev bison flex libssl-dev bc rsync
+#dnf install -y gcc gcc-c++ make ncurses-devel bison flex openssl-devel bc rsync
 
 #by KONOVALOV
