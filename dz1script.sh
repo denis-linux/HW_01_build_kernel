@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Путь к исходникам (если не в текущей директории)
-
 
 function install_apt(){
 apt install -y build-essential libncurses-dev bison flex libssl-dev bc rsync wget dpkg-dev dwarves kmod cpio
