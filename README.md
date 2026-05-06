@@ -21,9 +21,9 @@
 
 # ПЕРЕД ЗАПУСКОМ УСТАНОВИТЬ 
 
-apt install -y build-essential libncurses-dev bison flex libssl-dev bc rsync
 
-#dnf install -y gcc gcc-c++ make ncurses-devel bison flex openssl-devel bc rsync
+
+
 
 ### Основные зависимости для сборки ядра в Ubuntu
 sudo apt install -y libncurses-dev bison flex libssl-dev bc rsync
@@ -37,4 +37,6 @@ sudo apt install -y dpkg-dev
 ### для работы с git и получением исходников
 sudo apt install -y git
 
+
+#dnf install -y gcc gcc-c++ make ncurses-devel bison flex openssl-devel bc rsync git
 #by KONOVALOV
