@@ -19,22 +19,22 @@
 - KGDB (отладка ядра)
 - KPROBES (динамическое трассирование)
 
-### ПЕРЕД ЗАПУСКОМ УСТАНОВИТЬ 
+# ПЕРЕД ЗАПУСКОМ УСТАНОВИТЬ 
 
 apt install -y build-essential libncurses-dev bison flex libssl-dev bc rsync
 
 #dnf install -y gcc gcc-c++ make ncurses-devel bison flex openssl-devel bc rsync
 
-# Основные зависимости для сборки ядра в Ubuntu
+### Основные зависимости для сборки ядра в Ubuntu
 sudo apt install -y libncurses-dev bison flex libssl-dev bc rsync
 
-# Дополнительные пакеты, которые могут понадобиться
+### Дополнительные пакеты, которые могут понадобиться
 sudo apt install -y dwarves rpm-binutils kmod cpio
 
-# Для сборки deb-пакетов
+### Для сборки deb-пакетов
 sudo apt install -y dpkg-dev
 
-# Опционально: для работы с git и получением исходников
+### для работы с git и получением исходников
 sudo apt install -y git
 
 #by KONOVALOV
