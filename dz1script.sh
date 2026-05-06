@@ -1,14 +1,16 @@
 #!/bin/bash
 
-function deleteCASH() {
-    rm -f ../linux-u*
-    rm -f ../linux-*
-}
+# Путь к исходникам (если не в текущей директории)
+KERNEL_DIR=~/linux-7.0.3
+
+cd $KERNEL_DIR || exit 1
 
 function makeCONFIG() {
-    echo "Создание конфига..."
+    echo "Создание конфига для ядра 7.0.3..."
     rm -f .config
-    make defconfig
+    # Используем базовую конфигурацию x86_64
+    make x86_64_defconfig
+    # ИЛИ make defconfig (для архитектуры по умолчанию)
 }
 
 function disable() {
@@ -21,44 +23,48 @@ function enable() {
     ./scripts/config --enable "$1"
 }
 
+function set_val() {
+    echo -e "\nУСТАНОВКА $1 = $2\n"
+    ./scripts/config --set-val "$1" "$2"
+}
+
 function compile_kernel() {
     echo "Проверьте конфиг:"
-    echo "vim .config"
+    echo "nano .config"
     
-    # Гарантированно устанавливаем нужные значения
-    ./scripts/config --set-val CONFIG_DEBUG_INFO y
-    ./scripts/config --set-val CONFIG_DEBUG_INFO_NONE n
-    ./scripts/config --set-val CONFIG_DEBUG_INFO_DWARF4 y
-    make olddefconfig    
-    echo "введи для компиляции "
-    echo "time make -j$(nproc) deb-pkg 2>error.log"
+    # Устанавливаем параметры отладки для ядра 7.x
+    set_val "CONFIG_DEBUG_INFO" "y"
+    set_val "CONFIG_DEBUG_INFO_NONE" "n"
+    set_val "CONFIG_DEBUG_INFO_DWARF5" "y"  # В ядре 7.x лучше DWARF5 вместо DWARF4
+    
+    make olddefconfig
+    
+    echo "========================================="
+    echo "Для компиляции выполните:"
+    echo "time make -j\$(nproc) bindeb-pkg"
+    echo "========================================="
 }
 
 ################ START SCRIPT ####################
-#deleteCASH
 makeCONFIG
 
-# Отключаем ненужные модули
+# Отключаем модули (для ядра 7.x некоторые опции могли измениться)
 disable "SECURITY_SELINUX"
 disable "SECURITY_SMACK"
 disable "SECURITY_TOMOYO"
 disable "SECURITY_APPARMOR"
 disable "SECURITY_YAMA"
 disable "RANDOMIZE_BASE"
+disable "RANDOMIZE_KSTACK_OFFSET"
+disable "RANDOMIZE_MEMORY"
 disable "CPU_MITIGATIONS"
 disable "MITIGATION_SPECTRE_BHI"
 disable "MITIGATION_RFDS"
 disable "PAGE_TABLE_ISOLATION"
 disable "ZSWAP"
-#disable "BPF"
-#disable "BPF_SYSCALL"
-#disable "BPF_JIT"
-#disable "BPF_EVENTS"
-#disable "BPFILTER"
-disable "CONFIG_DEBUG_INFO_NONE"
+disable "ZRAM" # Новое в ядре 7.x
 
-
-# Включаем нужные модули
+# Включаем модули отладки
 enable "DEBUG_FS"
 enable "FTRACE"
 enable "FUNCTION_TRACER"
@@ -74,25 +80,26 @@ enable "KASAN_INLINE"
 enable "KASAN_EXTRA_INFO"
 enable "KGDB"
 enable "KGDB_SERIAL_CONSOLE"
-enable "SERIAL_CONSOLE"
 enable "CONSOLE_POLL"
 enable "KPROBES"
 enable "KPROBE_EVENT"
 
-# Явно устанавливаем параметры отладки
-./scripts/config --set-val CONFIG_DEBUG_INFO y
-./scripts/config --set-val CONFIG_DEBUG_INFO_NONE n
-./scripts/config --set-val CONFIG_DEBUG_INFO_DWARF4 y
+# Для ядра 7.x - новые опции отладки
+enable "DEBUG_KMEMLEAK"
+enable "DEBUG_STACK_USAGE"
+enable "PROVE_LOCKING"
 
-# Проверяем перед компиляцией
-echo "Проверка конфига ДО :"
+# Устанавливаем параметры отладки
+set_val "CONFIG_DEBUG_INFO" "y"
+set_val "CONFIG_DEBUG_INFO_NONE" "n"
+set_val "CONFIG_DEBUG_INFO_DWARF5" "y"
+
+# Проверка конфига
+echo -e "\nПроверка конфига:"
 grep "CONFIG_DEBUG_INFO" .config
 grep "CONFIG_DEBUG_INFO_NONE" .config
-grep "CONFIG_DEBUG_INFO_DWARF4" .config
+grep "CONFIG_DEBUG_INFO_DWARF5" .config
 
-compile_kernel
-
-echo "Проверка конфига ПОСЛЕ :"
-grep "CONFIG_DEBUG_INFO" .config
-grep "CONFIG_DEBUG_INFO_NONE" .config
-grep "CONFIG_DEBUG_INFO_DWARF4" .config
+echo -e "\nПодготовка конфига завершена!"
+echo "Запустите компиляцию командой:"
+echo "time make -j$(nproc) bindeb-pkg"
