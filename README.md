@@ -19,4 +19,10 @@
 - KGDB (отладка ядра)
 - KPROBES (динамическое трассирование)
 
+### ПЕРЕД ЗАПУСКОМ УСТАНОВИТЬ 
+
+apt install -y build-essential libncurses-dev bison flex libssl-dev bc rsync
+
+#dnf install -y build-essential libncurses-dev bison flex libssl-dev bc rsync
+
 #by KONOVALOV
