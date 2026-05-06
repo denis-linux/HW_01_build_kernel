@@ -9,7 +9,7 @@
 - Механизмы митигации (CPU_MITIGATIONS, SPECTRE_BHI, RFDS)
 - Page Table Isolation (PTI)
 - Zswap
-- Все компоненты BPF (BPF, BPF_SYSCALL, BPF_JIT и др.)
+
 
 ### Включенные модули:
 - DEBUG_FS
