@@ -50,7 +50,7 @@ function compile_kernel() {
     set_val "CONFIG_DEBUG_INFO_NONE" "n"
     set_val "CONFIG_DEBUG_INFO_DWARF5" "y"  # В ядре 7.x лучше DWARF5 вместо DWARF4
     
-    make olddefconfig
+    make olddefconfig 
     
     echo "========================================="
     echo "Для компиляции выполните:"
