@@ -50,12 +50,13 @@ disable "MITIGATION_SPECTRE_BHI"
 disable "MITIGATION_RFDS"
 disable "PAGE_TABLE_ISOLATION"
 disable "ZSWAP"
-disable "BPF"
-disable "BPF_SYSCALL"
-disable "BPF_JIT"
-disable "BPF_EVENTS"
+#disable "BPF"
+#disable "BPF_SYSCALL"
+#disable "BPF_JIT"
+#disable "BPF_EVENTS"
+#disable "BPFILTER"
 disable "CONFIG_DEBUG_INFO_NONE"
-disable "BPFILTER"
+
 
 # Включаем нужные модули
 enable "DEBUG_FS"
