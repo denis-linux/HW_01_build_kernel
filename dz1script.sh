@@ -2,7 +2,15 @@
 
 
 function install_apt(){
-apt install -y build-essential libncurses-dev bison flex libssl-dev bc rsync wget dpkg-dev dwarves kmod cpio
+sudo apt install -y build-essential libncurses-dev bison flex libssl-dev bc rsync wget dpkg-dev dwarves kmod cpio
+
+wget https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-7.0.3.tar.xz
+tar -xf linux-7.0.3.tar.xz
+cd linux-7.0.3
+}
+
+function install_dnf(){
+sudo dnf install -y gcc gcc-c++ make ncurses-devel bison flex openssl-devel bc rsync wget
 
 wget https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-7.0.3.tar.xz
 tar -xf linux-7.0.3.tar.xz
