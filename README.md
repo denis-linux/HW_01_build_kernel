@@ -38,5 +38,8 @@ sudo apt install -y dpkg-dev
 sudo apt install -y git
 
 
+
 #dnf install -y gcc gcc-c++ make ncurses-devel bison flex openssl-devel bc rsync git
+
+
 #by KONOVALOV
