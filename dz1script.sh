@@ -17,6 +17,10 @@ tar -xf linux-7.0.3.tar.xz
 cd linux-7.0.3
 }
 
+function start_comp(){
+make -j$(nproc) bindeb-pkg
+}
+
 function deleteCASH() {
     rm -f ../linux-u*
     rm -f ../linux-*
@@ -59,6 +63,7 @@ function compile_kernel() {
     ./scripts/config --set-val CONFIG_DEBUG_INFO_DWARF5 y
     
     make olddefconfig 
+    make localmodconfig
     echo -e "olddefconfig ok"
    # echo "========================================="
    # echo "Для компиляции выполните:"
