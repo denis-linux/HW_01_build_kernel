@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# нужные команды спрятаны в функции
 
 function how_install_kernel(){
     # Установить все необходимые пакеты одной командой
@@ -8,15 +9,15 @@ sudo dpkg -i linux-image-7.0.3_7.0.3-11_amd64.deb \
             linux-libc-dev_7.0.3-11_amd64.deb
 }
 
+
+#где конфиг для дз?? 
 function where_config(){
-# Распакуйте headers пакет
-dpkg-deb -R linux-headers-7.0.3_7.0.3-10_amd64.deb ./headers_extracted
+# Распакуйте image пакет
+dpkg-deb -R linux-image-7.0.3_7.0.3-1_amd64.deb ./image_extracted
+# config лежит здесь:
+cat image_extracted/boot/config-7.0.3
 
-# .config лежит здесь:
-./headers_extracted/usr/src/linux-headers-7.0.3/.config
-
-# Или
-./headers_extracted/usr/src/linux-headers-7.0.3/config
+#его надо скопировать и отправить на проверку дз
 }
 
 function install_apt(){
@@ -27,8 +28,26 @@ tar -xf linux-7.0.3.tar.xz
 cd linux-7.0.3
 }
 
+
+# 
 function install_dnf(){
-sudo dnf install -y gcc gcc-c++ make ncurses-devel bison flex openssl-devel bc rsync wget
+# эти команды не проверялись (!), но возможно помогут вам на редхат подобных ОС Линукс
+
+sudo dnf groupinstall -y "Development Tools"
+
+sudo dnf install -y \
+    bison \          # Замена bison
+    flex \           # Замена flex
+    openssl-devel \  # Замена libssl-dev
+    bc \             # bc (есть в репозиториях)
+    rsync \          # rsync
+    wget \           # wget
+    dwarves \        # Пакет для DWARF (из EPEL)
+    elfutils-libelf-devel \ # Обработка ELF-файлов
+    ncurses-devel \  # Замена libncurses-dev
+    kmod \           # Инструменты для работы с модулями ядра
+    gcc \            # Компилятор C
+    gcc-c++          # Компилятор C++ зачем-то, но видимо надо
 
 wget https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-7.0.3.tar.xz
 tar -xf linux-7.0.3.tar.xz
@@ -36,7 +55,7 @@ cd linux-7.0.3
 }
 
 function start_comp(){
-make -j$(nproc) bindeb-pkg
+make -j$(nproc) bindeb-pkg 2>error.log
 }
 
 function deleteCASH() {
@@ -53,7 +72,7 @@ function makeCONFIG() {
 }
 
 function disable() {
-    echo -e "\nОТКЛЮЧЕНИЕ модуля $1\n"
+    echo -e "ОТКЛЮЧЕНИЕ модуля $1"
     ./scripts/config --disable "$1"
 }
 
@@ -69,7 +88,7 @@ function set_val() {
 
 function compile_kernel() {
     echo "Проверьте конфиг:"
-    echo "nano .config"
+    echo "vim .config"
     
     # Устанавливаем параметры отладки для ядра 7.x
     ./scripts/config --set-val CONFIG_DEBUG_INFO y
@@ -80,10 +99,6 @@ function compile_kernel() {
     make olddefconfig 
     make localmodconfig
     echo -e "olddefconfig ok"
-   # echo "========================================="
-   # echo "Для компиляции выполните:"
-   # echo "time make -j\$(nproc) bindeb-pkg"
-   # echo "========================================="
 }
 
 ################ START SCRIPT ####################
@@ -141,4 +156,4 @@ grep "CONFIG_DEBUG_INFO_DWARF5" .config
 
 echo -e "\nПодготовка конфига завершена!"
 echo "Запустите компиляцию командой:"
-echo "time make -j$(nproc) bindeb-pkg"
+echo "make -j$(nproc) bindeb-pkg"
