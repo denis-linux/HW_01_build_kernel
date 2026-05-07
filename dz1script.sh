@@ -1,6 +1,24 @@
 #!/bin/bash
 
 
+function how_install_kernel(){
+    # Установить все необходимые пакеты одной командой
+sudo dpkg -i linux-image-7.0.3_7.0.3-11_amd64.deb \
+            linux-headers-7.0.3_7.0.3-11_amd64.deb \
+            linux-libc-dev_7.0.3-11_amd64.deb
+}
+
+function where_config(){
+# Распакуйте headers пакет
+dpkg-deb -R linux-headers-7.0.3_7.0.3-10_amd64.deb ./headers_extracted
+
+# .config лежит здесь:
+./headers_extracted/usr/src/linux-headers-7.0.3/.config
+
+# Или
+./headers_extracted/usr/src/linux-headers-7.0.3/config
+}
+
 function install_apt(){
 sudo apt install -y build-essential libncurses-dev bison flex libssl-dev bc rsync wget dpkg-dev dwarves kmod cpio debhelper-compat libdw-dev libelf-dev debhelper
 
